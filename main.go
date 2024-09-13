@@ -6,8 +6,9 @@ import (
 )
 
 func main() {
-	var userHeight = 1.8 // неявно присваивается float64 (выведение типов)
-	var userKg float64 = 100
-	var IMT = userKg / math.Pow(userHeight, 2) // неявно преобразуется в float64
+	userHeight := 1.8 // при таком способе объявления переменной нельзя указать тип (всегда будет неявное присвоение) и создать пустую переменную (без присвоения значения, просто создать переменную)
+	var userKg float64
+	userKg = 100
+	IMT := userKg / math.Pow(userHeight, 2) // неявно преобразуется в float64
 	fmt.Print(IMT)
 }
