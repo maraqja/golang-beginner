@@ -35,48 +35,37 @@ func main() {
 	// // 4: range (в блоке по array)
 
 	fmt.Println(`Калькулятор индекса массы тела`)
-	userKg, userHeight := getUserInput()
-	IMT := calculateIMT(userKg, userHeight)
+	// Упражнение
+	for {
+		userKg, userHeight := getUserInput()
+		IMT := calculateIMT(userKg, userHeight)
 
-	// МОЖНО ПИСАТЬ ОБЫЧНЫЕ УСЛОВИЯ РАВЕНСТВА СО СВИЧЕМ
-	// switch IMT {
-	// case 1:
-	// 	fmt.Println("У вас сильный недостаток веса")
-	// case 2:
-	// 	fmt.Println("У вас недостаток веса")
-	// }
+		switch {
+		case IMT < 16:
+			fmt.Println("У вас сильный недостаток веса")
+		case IMT < 18.5:
+			fmt.Println("У вас недостаток веса")
+		case IMT < 25:
+			fmt.Println("У вас нормальный вес")
+		case IMT < 30:
+			fmt.Println("У вас избыток веса")
+		default:
+			fmt.Println("У вас сильный избыток веса")
+		}
 
-	// А МОЖНО ПРЯМО УКАЗЫВАТЬ УСЛОВИЯ
-	switch {
-	case IMT < 16:
-		fmt.Println("У вас сильный недостаток веса")
-	case IMT < 18.5:
-		fmt.Println("У вас недостаток веса")
-	case IMT < 25:
-		fmt.Println("У вас нормальный вес")
-	case IMT < 30:
-		fmt.Println("У вас избыток веса")
-	default:
-		fmt.Println("У вас сильный избыток веса")
+		outputResult(IMT)
+
+		isRepeateCalculation := checkRepeatCalculation()
+		if !isRepeateCalculation {
+			break
+		}
 	}
 
-	// if IMT < 16 {
-	// 	fmt.Println("У вас сильный недостаток веса")
-	// } else if IMT < 18.5 {
-	// 	fmt.Println("У вас недостаток веса")
-	// } else if IMT < 25 {
-	// 	fmt.Println("У вас нормальный вес")
-	// } else if IMT < 30 {
-	// 	fmt.Println("У вас избыток веса")
-	// } else {
-	// 	fmt.Println("У вас сильный избыток веса")
-	// }
-	outputResult(IMT)
 }
 
 func outputResult(imt float64) {
 	result := fmt.Sprintf("Ваш индекс массы тела: %.f", imt) // кладем форматированную строку в переменную
-	fmt.Print((result))
+	fmt.Println((result))
 }
 
 func calculateIMT(userKg float64, userHeight float64) float64 { // объявляем типы входных данных и тип результата
@@ -94,4 +83,14 @@ func getUserInput() (float64, float64) { // Поддерживает возвр�
 	fmt.Scan(&userKg)
 
 	return userKg, userHeight
+}
+
+func checkRepeatCalculation() bool {
+	var userChoice string
+	fmt.Println("Хотите продолжить? y/n")
+	fmt.Scan(&userChoice)
+	if userChoice == "y" || userChoice == "Y" {
+		return true
+	}
+	return false
 }
