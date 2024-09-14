@@ -5,10 +5,23 @@ import (
 	"math"
 )
 
+const IMTPower float64 = 2 // тк функция Pow требует степень в float64
+
 func main() {
 	fmt.Println(`Калькулятор индекса массы тела`)
 	userKg, userHeight := getUserInput()
 	IMT := calculateIMT(userKg, userHeight)
+	if IMT < 16 {
+		fmt.Println("У вас сильный недостаток веса")
+	} else if IMT >= 16 && IMT < 18.5 {
+		fmt.Println("У вас недостаток веса")
+	} else if IMT >= 18.5 && IMT < 25 {
+		fmt.Println("У вас нормальный вес")
+	} else if IMT >= 25 && IMT < 30 {
+		fmt.Println("У вас избыток веса")
+	} else {
+		fmt.Println("У вас переизбыток веса")
+	}
 	outputResult(IMT)
 }
 
@@ -18,8 +31,6 @@ func outputResult(imt float64) {
 }
 
 func calculateIMT(userKg float64, userHeight float64) float64 { // объявляем типы входных данных и тип результата
-	const IMTPower float64 = 2 // тк функция Pow требует степень в float64
-
 	IMT := userKg / math.Pow(userHeight/100, IMTPower) // неявно преобразуется в float64
 	return IMT
 }
