@@ -17,8 +17,11 @@ func main() {
 	fmt.Print("Введите свой вес (в кг):")
 	fmt.Scan(&userKg)
 	IMT := userKg / math.Pow(userHeight/100, IMTPower) // неявно преобразуется в float64
-	fmt.Printf("Ваш индекс массы тела: %.f\n", IMT)
 
-	result := fmt.Sprintf("Ваш индекс массы тела: %.f", IMT) // кладем форматированную строку в переменную
+	outputResult(IMT)
+}
+
+func outputResult(imt float64) {
+	result := fmt.Sprintf("Ваш индекс массы тела: %.f", imt) // кладем форматированную строку в переменную
 	fmt.Print((result))
 }
