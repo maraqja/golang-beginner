@@ -11,17 +11,40 @@ func main() {
 	fmt.Println(`Калькулятор индекса массы тела`)
 	userKg, userHeight := getUserInput()
 	IMT := calculateIMT(userKg, userHeight)
-	if IMT < 16 {
+
+	// МОЖНО ПИСАТЬ ОБЫЧНЫЕ УСЛОВИЯ РАВЕНСТВА СО СВИЧЕМ
+	// switch IMT {
+	// case 1:
+	// 	fmt.Println("У вас сильный недостаток веса")
+	// case 2:
+	// 	fmt.Println("У вас недостаток веса")
+	// }
+
+	// А МОЖНО ПРЯМО УКАЗЫВАТЬ УСЛОВИЯ
+	switch {
+	case IMT < 16:
 		fmt.Println("У вас сильный недостаток веса")
-	} else if IMT < 18.5 {
+	case IMT < 18.5:
 		fmt.Println("У вас недостаток веса")
-	} else if IMT < 25 {
+	case IMT < 25:
 		fmt.Println("У вас нормальный вес")
-	} else if IMT < 30 {
+	case IMT < 30:
 		fmt.Println("У вас избыток веса")
-	} else {
+	default:
 		fmt.Println("У вас сильный избыток веса")
 	}
+
+	// if IMT < 16 {
+	// 	fmt.Println("У вас сильный недостаток веса")
+	// } else if IMT < 18.5 {
+	// 	fmt.Println("У вас недостаток веса")
+	// } else if IMT < 25 {
+	// 	fmt.Println("У вас нормальный вес")
+	// } else if IMT < 30 {
+	// 	fmt.Println("У вас избыток веса")
+	// } else {
+	// 	fmt.Println("У вас сильный избыток веса")
+	// }
 	outputResult(IMT)
 }
 
