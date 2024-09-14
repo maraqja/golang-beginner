@@ -11,8 +11,8 @@ func main() {
 	var userHeight float64 // 0.0 если не указать (по умолчанию)
 	var userKg float64     // 0.0 если не указать (по умолчанию)
 	userKg = 100
-	fmt.Println("Калькулятор индекса массы тела")
-	fmt.Print("Введите свой рост (в сантиметрах):")
+	fmt.Print(`Калькулятор индекса массы тела
+Введите свой рост (в сантиметрах):`)
 	fmt.Scan(&userHeight)
 	fmt.Print("Введите свой вес (в кг):")
 	fmt.Scan(&userKg)
