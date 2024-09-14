@@ -8,9 +8,14 @@ import (
 func main() {
 	const IMTPower float64 = 2 // тк функция Pow требует степень в float64
 
-	userHeight := 1.8 // при таком способе объявления переменной нельзя указать тип (всегда будет неявное присвоение) и создать пустую переменную (без присвоения значения, просто создать переменную)
-	var userKg float64
+	var userHeight float64 // 0.0 если не указать (по умолчанию)
+	var userKg float64     // 0.0 если не указать (по умолчанию)
 	userKg = 100
-	IMT := userKg / math.Pow(userHeight, IMTPower) // неявно преобразуется в float64
-	fmt.Print(IMT)
+	fmt.Println("Калькулятор индекса массы тела")
+	fmt.Print("Введите свой рост (в сантиметрах):")
+	fmt.Scan(&userHeight)
+	fmt.Print("Введите свой вес (в кг):")
+	fmt.Scan(&userKg)
+	IMT := userKg / math.Pow(userHeight/100, IMTPower) // неявно преобразуется в float64
+	fmt.Printf("Ваш индекс массы тела: %.f", IMT)
 }
