@@ -6,16 +6,8 @@ import (
 )
 
 func main() {
-
-	var userHeight float64 // 0.0 если не указать (по умолчанию)
-	var userKg float64     // 0.0 если не указать (по умолчанию)
-	userKg = 100
 	fmt.Println(`Калькулятор индекса массы тела`)
-	fmt.Print("Введите свой рост (в сантиметрах):")
-	fmt.Scan(&userHeight)
-	fmt.Print("Введите свой вес (в кг):")
-	fmt.Scan(&userKg)
-
+	userKg, userHeight := getUserInput()
 	IMT := calculateIMT(userKg, userHeight)
 	outputResult(IMT)
 }
@@ -30,4 +22,16 @@ func calculateIMT(userKg float64, userHeight float64) float64 { // объявл�
 
 	IMT := userKg / math.Pow(userHeight/100, IMTPower) // неявно преобразуется в float64
 	return IMT
+}
+
+func getUserInput() (float64, float64) { // Поддерживает возврат нескольких значений из функции, их тип надо описать в ()
+	var userKg float64
+	var userHeight float64
+
+	fmt.Print("Введите свой рост (в сантиметрах):")
+	fmt.Scan(&userHeight)
+	fmt.Print("Введите свой вес (в кг):")
+	fmt.Scan(&userKg)
+
+	return userKg, userHeight
 }
