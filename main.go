@@ -8,6 +8,32 @@ import (
 const IMTPower float64 = 2 // тк функция Pow требует степень в float64
 
 func main() {
+	// // cycles:
+	// // 1:
+	for i := 0; i < 10; i++ {
+		fmt.Printf("%d\n", i)
+	}
+
+	// // 2: если нужна переменная вне цикла - по сути замена while
+	// i := 0
+	// for i < 10 {
+	// 	fmt.Printf("%d\n", i)
+	// 	i++
+	// }
+
+	// // 3: бесконечный цикл
+	// i := 0
+	// for {
+	// 	fmt.Printf("%d\n", i)
+	// 	i++
+	// 	if i == 5 {
+	// 		break // Выход из цикла
+	// 	}
+
+	// }
+
+	// // 4: range (в блоке по array)
+
 	fmt.Println(`Калькулятор индекса массы тела`)
 	userKg, userHeight := getUserInput()
 	IMT := calculateIMT(userKg, userHeight)
