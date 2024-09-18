@@ -42,8 +42,9 @@ func main() {
 		fmt.Printf("%v, %v\n", userKg, userHeight)
 		IMT, err := calculateIMT(userKg, userHeight)
 		if err != nil {
-			fmt.Println(err)
-			continue
+			// fmt.Println(err)
+			// continue // просто переходим на некст иттерацию при вводе неверных данных
+			panic(err) // завершаем приложение с ошибкой (код > 0)
 		}
 
 		switch {
