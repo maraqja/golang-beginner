@@ -1,6 +1,7 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"math"
 )
@@ -38,7 +39,12 @@ func main() {
 	// Упражнение
 	for {
 		userKg, userHeight := getUserInput()
-		IMT := calculateIMT(userKg, userHeight)
+		fmt.Printf("%v, %v\n", userKg, userHeight)
+		IMT, err := calculateIMT(userKg, userHeight)
+		if err != nil {
+			fmt.Println(err)
+			continue
+		}
 
 		switch {
 		case IMT < 16:
@@ -68,9 +74,12 @@ func outputResult(imt float64) {
 	fmt.Println((result))
 }
 
-func calculateIMT(userKg float64, userHeight float64) float64 { // объявляем типы входных данных и тип результата
+func calculateIMT(userKg float64, userHeight float64) (float64, error) { // объявляем типы входных данных и тип результата
+	if userKg <= 0 || userHeight <= 0 {
+		return 0, errors.New(("PARAMS_MUST_FLOAT_GREATER_THAN_0"))
+	}
 	IMT := userKg / math.Pow(userHeight/100, IMTPower) // неявно преобразуется в float64
-	return IMT
+	return IMT, nil                                    // nil - специальное значение, обозначающее отсутствие чего-либо
 }
 
 func getUserInput() (float64, float64) { // Поддерживает возврат нескольких значений из функции, их тип надо описать в ()
