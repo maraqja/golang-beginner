@@ -4,7 +4,6 @@ import "fmt"
 
 func main() {
 
-	// Упражнение
 	var transactions []float64
 
 	for {
@@ -18,7 +17,11 @@ func main() {
 	}
 	// fmt.Printf("Transactions: %v", transactions)
 
-	for index, value := range transactions {
-		fmt.Println(index, value)
+	// Упражнение
+	balance := 0.0
+	for _, value := range transactions {
+		// fmt.Println(index, value)
+		balance += value
 	}
+	fmt.Printf("Balance, %f\n", balance)
 }
