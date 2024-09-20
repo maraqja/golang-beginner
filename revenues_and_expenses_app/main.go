@@ -3,6 +3,11 @@ package main
 import "fmt"
 
 func main() {
+
+	tr1 := []int{1, 2, 3}
+	tr2 := []int{4, 5, 6}
+	tr1 = append(tr1, tr2...) // unpack (~ spread в js)
+	fmt.Println(tr1)
 	// Упражнение
 	var transactions []float64
 
