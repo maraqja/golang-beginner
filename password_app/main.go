@@ -4,13 +4,11 @@ import "fmt"
 
 func main() {
 	a := 5
-	res := double(a)
-	fmt.Println(res)
-
-	pointer_a := &a        // создаем указатель на переменную
-	fmt.Println(pointer_a) // выведет адрес переменной в памяти
+	double(&a) // это будет МУТИРОВАНИЕ исходного a !!!
+	fmt.Println(a)
 }
 
-func double(num int) int {
-	return num * 2
+func double(num *int) { // *type -  указатель на переменную типа type
+	// должны получить значение переменной по указателю
+	*num = *num * 2 // *num - дереференс (dereference) - получаем значение переменной по адресу указателя
 }
