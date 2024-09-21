@@ -5,6 +5,13 @@ import "fmt"
 type stringMap = map[string]string
 
 func main() {
+	m := make(stringMap, 2)
+	m["A"] = "1"
+	m["B"] = "2"
+	m["C"] = "3" // на этот уже будет выделяться память при добавлении
+	fmt.Println(m)
+	fmt.Println(len(m)) // у мапа нет capacity
+
 	// var bookmarks map[string]string
 	bookmarks := stringMap{}
 	fmt.Println("Закладки")
