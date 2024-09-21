@@ -6,6 +6,7 @@ func main() {
 	// var bookmarks map[string]string
 	bookmarks := map[string]string{}
 	fmt.Println("Закладки")
+menu:
 	for {
 		user_choice := getUserChoice()
 
@@ -17,7 +18,7 @@ func main() {
 		case 3:
 			bookmarks = deleteBookmark(bookmarks)
 		case 4:
-			break
+			break menu // выходим именно из цикла, а не из case
 		}
 	}
 }
