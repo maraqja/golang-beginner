@@ -15,16 +15,23 @@ type account struct { // Описываем тип стракта
 
 func newAccount(login, password, urlString string) (*account, error) { // Это типо можно использовать как конструктор стракта (название просто по соглашению)
 	// Хорошо в случае если нужно валидировать входные данные
+	if login == "" { // логин не был передан: дефолтное значение непереданноо строки - пустая строка
+		return nil, errors.New("INVALID_LOGIN")
+	}
 	_, err := url.ParseRequestURI(urlString)
 	if err != nil {
 		// return nil, err
-		return nil, errors.New("Invalid URL")
+		return nil, errors.New("INVALID_URL")
 	}
-	return &account{ // возвращаем именно ссылку на структуру, тк иначе мы создадим структуру в функции и еще потом скопириуем в переменную при вызове функции
+	newAcc := &account{ // возвращаем именно ссылку на структуру, тк иначе мы создадим структуру в функции и еще потом скопириуем в переменную при вызове функции
 		login:    login,
 		password: password,
 		url:      urlString,
-	}, nil
+	}
+	if password == "" { // Если не передали пароль, то генерим
+		newAcc.generatePassword(10)
+	}
+	return newAcc, nil
 }
 
 // Указываем что функция outputPassword - метод struct account
@@ -45,14 +52,14 @@ var letterRunes = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ12
 
 func main() {
 	login := promptData("Введите логин")
+	password := promptData("Введите пароль")
 	url := promptData("Введите URL")
-
-	account1, error := newAccount(login, "", url)
+	account1, error := newAccount(login, password, url)
 	if error != nil {
 		fmt.Print(error)
 		return
 	}
-	account1.generatePassword(10)
+	// account1.generatePassword(10)
 	account1.outputPassword()
 	fmt.Println(account1.url)
 
@@ -61,7 +68,7 @@ func main() {
 func promptData(prompt string) string {
 	fmt.Println(prompt)
 	var res string
-	fmt.Scan(&res)
+	fmt.Scanln(&res) // чтобы при нажатии Enter регало пустую строку
 	return res
 
 }
