@@ -2,26 +2,39 @@ package main
 
 import "fmt"
 
-func main() {
-	a := [4]int{1, 2, 3, 4}
-	reverse(&a) // Массив != слайс: массив копируется, а слайс передается по ссылке
-	fmt.Println(a)
+type account struct { // Описываем тип стракта
+	login    string
+	password string
+	url      string
 }
 
-// // my
-// func reverse(arr *[4]int) { // эта функция будет работать и для слайса, но надо будет переделать немного
-// 	left, right := 0, len(arr)-1 // понятно что всегда будет 3
+func main() {
+	login := promptData("Введите логин")
+	password := promptData("Введите пароль")
+	url := promptData("Введите URL")
 
-// 	for left < right {
-// 		// Меняем местами элементы
-// 		arr[left], arr[right] = arr[right], arr[left]
-// 		left++
-// 		right--
-// 	}
-// }
-
-func reverse(arr *[4]int) {
-	for index, value := range *arr { // ВАЖНО - проходим по значению, а не по ссылкам - если бы по ссылке проходили, то был бы результат как в JS [1,2,2,1]
-		(*arr)[len(arr)-1-index] = value // value берем по значению (там примитив)
+	account1 := account{ // Создаем стракта (инстас типа стракта)
+		login:    login,
+		password: password,
+		url:      url,
 	}
+
+	account2 := account{ // Сокращенная запись, будет зависеть от порядка
+		login,
+		password,
+		url,
+	}
+
+}
+
+func promptData(prompt string) string {
+	fmt.Print(prompt)
+	var res string
+	fmt.Scan(&res)
+	return res
+
+}
+
+func outputPassword(login, password, url string) {
+	fmt.Println(login, password, url)
 }
