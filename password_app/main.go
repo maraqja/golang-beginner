@@ -19,22 +19,24 @@ func main() {
 		url:      url,
 	}
 
-	account2 := account{ // Сокращенная запись, будет зависеть от порядка
-		login,
-		password,
-		url,
-	}
+	// account2 := account{ // Сокращенная запись, будет зависеть от порядка
+	// 	login,
+	// 	password,
+	// 	url,
+	// }
+
+	outputPassword(&account1)
 
 }
 
 func promptData(prompt string) string {
-	fmt.Print(prompt)
+	fmt.Println(prompt)
 	var res string
 	fmt.Scan(&res)
 	return res
 
 }
 
-func outputPassword(login, password, url string) {
-	fmt.Println(login, password, url)
+func outputPassword(acc *account) { // struct полностью копируется при передаче в функцию, поэтому есть смысл передавать их по ссылке
+	fmt.Println((*acc).login, (*acc).password, acc.url) // GO позволяет использовать shortcode для dereference - вместо (*acc).url использовать просто acc.url
 }
