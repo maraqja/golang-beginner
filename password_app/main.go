@@ -12,8 +12,9 @@ type account struct { // Описываем тип стракта
 }
 
 // Указываем что функция outputPassword - метод struct account
-func (acc account) outputPassword() {
+func (acc *account) outputPassword() {
 	fmt.Println(acc.login, acc.password, acc.url)
+	acc.url = "test"
 }
 
 var letterRunes = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890-_*!")
@@ -34,6 +35,7 @@ func main() {
 	// 	url,
 	// }
 	account1.outputPassword()
+	fmt.Println(account1.url)
 
 }
 
