@@ -17,6 +17,14 @@ func (acc *account) outputPassword() {
 	acc.url = "test"
 }
 
+func (acc *account) generatePassword(n int) {
+	res := make([]rune, n)
+	for i := range res {
+		res[i] = letterRunes[rand.IntN(len(letterRunes))]
+	}
+	acc.password = string(res)
+}
+
 var letterRunes = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890-_*!")
 
 func main() {
@@ -24,16 +32,10 @@ func main() {
 	url := promptData("Введите URL")
 
 	account1 := account{ // Создаем стракта (инстас типа стракта)
-		login:    login,
-		password: generatePassword(10),
-		url:      url,
+		login: login,
+		url:   url,
 	}
-
-	// account2 := account{ // Сокращенная запись, будет зависеть от порядка
-	// 	login,
-	// 	password,
-	// 	url,
-	// }
+	account1.generatePassword(10)
 	account1.outputPassword()
 	fmt.Println(account1.url)
 
@@ -45,12 +47,4 @@ func promptData(prompt string) string {
 	fmt.Scan(&res)
 	return res
 
-}
-
-func generatePassword(n int) string {
-	res := make([]rune, n)
-	for i := range res {
-		res[i] = letterRunes[rand.IntN(len(letterRunes))]
-	}
-	return string(res)
 }
