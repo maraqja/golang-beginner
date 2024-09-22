@@ -11,6 +11,15 @@ type account struct { // Описываем тип стракта
 	url      string
 }
 
+func newAccount(login, password, url string) *account { // Это типо можно использовать как конструктор стракта (название просто по соглашению)
+	// Хорошо в случае если нужно валидировать входные данные
+	return &account{ // возвращаем именно ссылку на структуру, тк иначе мы создадим структуру в функции и еще потом скопириуем в переменную при вызове функции
+		login:    login,
+		password: password,
+		url:      url,
+	}
+}
+
 // Указываем что функция outputPassword - метод struct account
 func (acc *account) outputPassword() {
 	fmt.Println(acc.login, acc.password, acc.url)
@@ -31,10 +40,7 @@ func main() {
 	login := promptData("Введите логин")
 	url := promptData("Введите URL")
 
-	account1 := account{ // Создаем стракта (инстас типа стракта)
-		login: login,
-		url:   url,
-	}
+	account1 := newAccount(login, "", url)
 	account1.generatePassword(10)
 	account1.outputPassword()
 	fmt.Println(account1.url)
