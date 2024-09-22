@@ -9,6 +9,14 @@ type account struct { // Описываем тип стракта
 }
 
 func main() {
+
+	// str := "Привет!)"
+	str := []rune("Привет!") // Строку можно представить как массив рун
+	for _, ch := range str { // цикл по строке, ch имеет тип Rune
+		fmt.Println(ch, string(ch))
+	}
+	// Rune - юникод представления буквы (имеет тип int32)
+
 	login := promptData("Введите логин")
 	password := promptData("Введите пароль")
 	url := promptData("Введите URL")
