@@ -11,6 +11,11 @@ type account struct { // Описываем тип стракта
 	url      string
 }
 
+// Указываем что функция outputPassword - метод struct account
+func (acc account) outputPassword() {
+	fmt.Println(acc.login, acc.password, acc.url)
+}
+
 var letterRunes = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890-_*!")
 
 func main() {
@@ -28,7 +33,7 @@ func main() {
 	// 	password,
 	// 	url,
 	// }
-	outputPassword(&account1)
+	account1.outputPassword()
 
 }
 
@@ -38,10 +43,6 @@ func promptData(prompt string) string {
 	fmt.Scan(&res)
 	return res
 
-}
-
-func outputPassword(acc *account) { // struct полностью копируется при передаче в функцию, поэтому есть смысл передавать их по ссылке
-	fmt.Println((*acc).login, (*acc).password, acc.url) // GO позволяет использовать shortcode для dereference - вместо (*acc).url использовать просто acc.url
 }
 
 func generatePassword(n int) string {
