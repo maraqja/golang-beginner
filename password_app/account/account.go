@@ -6,6 +6,8 @@ import (
 	"math/rand/v2"
 	"net/url"
 	"time"
+
+	"github.com/fatih/color"
 )
 
 var letterRunes = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890-_*!")
@@ -39,6 +41,7 @@ func newAccount(login, password, UrlString string) (*Account, error) { // Это
 
 // Указываем что функция outputPassword - метод struct Account
 func (acc *Account) OutputPassword() {
+	color.Cyan(acc.login)
 	fmt.Println(acc.login, acc.password, acc.Url)
 	acc.Url = "test"
 }
