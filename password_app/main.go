@@ -2,22 +2,21 @@ package main
 
 import (
 	"fmt"
+	"password_app/account" // {название модуля}/{название пакета} - инааче будет искать стандартный пакет
 )
-
-var letterRunes = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890-_*!")
 
 func main() {
 	login := promptData("Введите логин")
 	password := promptData("Введите пароль")
 	url := promptData("Введите URL")
-	account1, error := newAccountWithTimeStamp(login, password, url)
+	account1, error := account.NewAccountWithTimeStamp(login, password, url)
 	if error != nil {
 		fmt.Print(error)
 		return
 	}
 	// account1.generatePassword(10)
-	account1.outputPassword()
-	fmt.Println(account1.url)
+	account1.OutputPassword()
+	fmt.Println(account1.Url) // букву свойства тоже надо сделать большой в пакете импортируемом, если нужно обращаться к этому свойству тут
 	fmt.Println(account1)
 
 }
