@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"math/rand/v2"
 	"net/url"
+	"reflect"
 	"time"
 
 	"github.com/fatih/color"
@@ -13,8 +14,9 @@ import (
 var letterRunes = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890-_*!")
 
 type Account struct { // Описываем тип стракта
-	login    string
-	password string
+	login string `json:"login" xml:"test"` // это тег структуры - нужен для преобразования в JSON и другие форматы (пробел разделяет теги)
+	// Благодаря этим тегам можем в runtime получать доп метаинформацию (с помощью встроенной библиотеки Reflect)
+	password string ``
 	Url      string
 }
 
@@ -80,7 +82,9 @@ func NewAccountWithTimeStamp(login, password, UrlString string) (*AccountWithTim
 			Url:      UrlString,
 		},
 	}
-	if password == "" { // Если не передали пароль, то генерим
+	field, _ := reflect.TypeOf(newAcc).Elem().FieldByName("login") // reflect позволяет работать с типами в runtime - получаем тип, берем элемент и находим по имени "login"
+	fmt.Println(field.Tag)                                         // получаем тег свойства стракта - то есть с помощью reflect можем получить теги свойств (метаданные)
+	if password == "" {                                            // Если не передали пароль, то генерим
 		// newAcc.Account.generatePassword(10) // ориг запись
 		newAcc.generatePassword(10)
 	}
