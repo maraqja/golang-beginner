@@ -15,23 +15,26 @@ import (
 
 // оба файла необходимо коммитить, чтобы можно было восстановить зависимости
 func main() {
-	files.WriteFile("FILE CONTENT", "kaka.txt")
-	files.ReadFile("kaka.txt")
+	createAccount()
+}
+
+func createAccount() {
 	login := promptData("Введите логин")
 	password := promptData("Введите пароль")
 	url := promptData("Введите URL")
-	account1, error := account.NewAccountWithTimeStamp(login, password, url)
-	if error != nil {
-		fmt.Print(error)
+	myAccount, err := account.NewAccount(login, password, url)
+	if err != nil {
+		fmt.Print(err)
 		return
 	}
 
-	// account1.generatePassword(10)
-	account1.OutputPassword()
+	file, err := myAccount.ToBytes()
+	if err != nil {
+		fmt.Print(err)
+		return
+	}
 
-	fmt.Println(account1.Url) // букву свойства тоже надо сделать большой в пакете импортируемом, если нужно обращаться к этому свойству тут
-	fmt.Println(account1)
-
+	files.WriteFile(file, "data.json")
 }
 
 func promptData(prompt string) string {

@@ -15,7 +15,7 @@ func ReadFile(name string) {
 
 }
 
-func WriteFile(content string, name string) {
+func WriteFile(content []byte, name string) {
 	file, err := os.Create(name)
 	if err != nil {
 		fmt.Println(err)
@@ -26,7 +26,7 @@ func WriteFile(content string, name string) {
 	defer fmt.Println(2) // будет раньше
 	// тот кого 1-го вызвали с defer - тот будет позже выполнен
 
-	_, err = file.WriteString(content)
+	_, err = file.Write(content)
 	if err != nil {
 		fmt.Println(err)
 		return
