@@ -15,7 +15,7 @@ import (
 
 // оба файла необходимо коммитить, чтобы можно было восстановить зависимости
 func main() {
-	files.WriteFile()
+	files.WriteFile("FILE CONTENT", "kaka.txt")
 	login := promptData("Введите логин")
 	password := promptData("Введите пароль")
 	url := promptData("Введите URL")
