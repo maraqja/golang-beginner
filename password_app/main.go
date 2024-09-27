@@ -15,7 +15,41 @@ import (
 
 // оба файла необходимо коммитить, чтобы можно было восстановить зависимости
 func main() {
-	createAccount()
+
+Menu:
+	for {
+		userChoice := getMenu()
+		switch userChoice {
+		case 1:
+			createAccount()
+		case 2:
+			findAccount()
+		case 3:
+			deleteAccount()
+		default:
+			break Menu
+		}
+	}
+
+}
+
+func getMenu() int {
+	var userChoice int
+	fmt.Println("Выберите вариант")
+	fmt.Println("1. Создать аккаунт")
+	fmt.Println("2. Найти аккаунт")
+	fmt.Println("3. Удалить аккаунт")
+	fmt.Println("4 (и любое другое). Выход")
+	fmt.Scan(&userChoice)
+	return userChoice
+}
+
+func findAccount() {
+
+}
+
+func deleteAccount() {
+
 }
 
 func createAccount() {
