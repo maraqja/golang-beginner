@@ -1,7 +1,6 @@
 package account // чтобы создать отдельный пакет, нужно вынести файл в папку с названием как у пакета
 // Соглашение - все что написано с большой буквы - ЭКСПОРТИРУЕМОЕ, иначе - нет
 import (
-	"encoding/json"
 	"errors"
 	"fmt"
 	"math/rand/v2"
@@ -59,12 +58,4 @@ func (acc *Account) generatePassword(n int) {
 		res[i] = letterRunes[rand.IntN(len(letterRunes))]
 	}
 	acc.Password = string(res)
-}
-
-func (acc *Account) ToBytes() ([]byte, error) { // метод для преобразования аккаунта-структуры в итоговый байт массив для создания файла
-	file, err := json.Marshal(acc) // принимает переменную любого типа, которую нужно сериализовать в JSON, и возвращает два значения: сериализованные данные в виде байтового массива ([]byte) и ошибку (error)
-	if err != nil {
-		return nil, errors.New("CANT_PARSE_TO_JSON")
-	}
-	return file, nil
 }

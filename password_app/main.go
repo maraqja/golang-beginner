@@ -61,8 +61,9 @@ func createAccount() {
 		fmt.Print(err)
 		return
 	}
-
-	file, err := myAccount.ToBytes()
+	vault := account.NewVault()
+	vault.AddAccount(*myAccount)
+	file, err := vault.ToBytes()
 	if err != nil {
 		fmt.Print(err)
 		return
