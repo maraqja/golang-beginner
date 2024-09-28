@@ -4,8 +4,7 @@ import (
 	"fmt"
 	"password_app/account" // {название модуля}/{название пакета} - инааче будет искать стандартный пакет
 	"password_app/files"
-
-	"github.com/fatih/color"
+	"password_app/output"
 )
 
 // для добавления внешнего пакета - go get {путь до пакета} - go get github.com/fatih/color
@@ -17,6 +16,8 @@ import (
 
 // оба файла необходимо коммитить, чтобы можно было восстановить зависимости
 func main() {
+	output.PrintError(1)
+	output.PrintError("Kaka")
 	db := files.NewJsonDb("data.json")
 	// db := cloud.NewCloudDb("https://kaka.com") // теперь можем использовать любую struct, реализующую интерфейса бд
 	vault := account.NewVault(db)
@@ -53,7 +54,7 @@ func findAccount(vault *account.VaultWithDb) {
 	foundAccounts := vault.FindAccountsByUrl(url)
 	// fmt.Println(foundAccounts)
 	if len(foundAccounts) == 0 {
-		color.Red("Не найдено аккаунтов по url = %s", url)
+		output.PrintError("Не найдено аккаунтов по url = " + url)
 	}
 	for _, account := range foundAccounts {
 		account.Output()
@@ -64,9 +65,9 @@ func deleteAccount(vault *account.VaultWithDb) {
 	url := promptData("Введите URL")
 	isDeleted := vault.DeleteAccountByUrl(url)
 	if isDeleted {
-		color.Green("Удалено")
+		output.PrintError("Удалено")
 	} else {
-		color.Red("Не найдено")
+		output.PrintError("Не найдено")
 	}
 }
 

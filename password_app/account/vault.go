@@ -3,10 +3,9 @@ package account
 import (
 	"encoding/json"
 	"errors"
+	"password_app/output"
 	"strings"
 	"time"
-
-	"github.com/fatih/color"
 )
 
 // хранилище аккаунтов
@@ -50,7 +49,7 @@ func NewVault(db Db) *VaultWithDb {
 	var vault Vault
 	err = json.Unmarshal(file, &vault) // парсим данные файла в JSON (в переменную vault)
 	if err != nil {
-		color.Red(err.Error())
+		output.PrintError(err)
 	}
 	return &VaultWithDb{
 		Vault: vault,
@@ -105,7 +104,7 @@ func (vault *VaultWithDb) save() { // внутренний метод (поэт�
 	vault.UpdatedAt = time.Now()
 	data, err := vault.Vault.ToBytes()
 	if err != nil {
-		color.Red(err.Error())
+		output.PrintError(err)
 	}
 	vault.db.Write(data)
 }
