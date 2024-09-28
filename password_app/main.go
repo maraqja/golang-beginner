@@ -58,7 +58,13 @@ func findAccount(vault *account.Vault) {
 }
 
 func deleteAccount(vault *account.Vault) {
-
+	url := promptData("Введите URL")
+	isDeleted := vault.DeleteAccountByUrl(url)
+	if isDeleted {
+		color.Green("Удалено")
+	} else {
+		color.Red("Не найдено")
+	}
 }
 
 func createAccount(vault *account.Vault) {

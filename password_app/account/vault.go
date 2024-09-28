@@ -35,11 +35,8 @@ func NewVault() *Vault {
 func (vault *Vault) AddAccount(acc *Account) {
 	vault.Accounts = append(vault.Accounts, *acc)
 	vault.UpdatedAt = time.Now()
-	data, err := vault.ToBytes()
-	if err != nil {
-		color.Red(err.Error())
-	}
-	files.WriteFile(data, "data.json")
+
+	vault.save()
 }
 
 func (vault *Vault) FindAccountsByUrl(url string) []Account {
@@ -54,10 +51,35 @@ func (vault *Vault) FindAccountsByUrl(url string) []Account {
 	return foundAccounts
 }
 
+func (vault *Vault) DeleteAccountByUrl(url string) bool {
+	newAccounts := []Account{}
+	isDeleted := false
+	for _, account := range vault.Accounts {
+		if !strings.Contains(account.Url, url) {
+			newAccounts = append(newAccounts, account)
+			continue
+		}
+		isDeleted = true
+	}
+	vault.Accounts = newAccounts
+
+	vault.save()
+	return isDeleted
+}
+
 func (vault *Vault) ToBytes() ([]byte, error) { // метод для преобразования аккаунта-структуры в итоговый байт массив для создания файла
 	file, err := json.Marshal(vault) // принимает переменную любого типа, которую нужно сериализовать в JSON, и возвращает два значения: сериализованные данные в виде байтового массива ([]byte) и ошибку (error)
 	if err != nil {
 		return nil, errors.New("CANT_PARSE_TO_JSON")
 	}
 	return file, nil
+}
+
+func (vault *Vault) save() { // внутренний метод (поэтому с маленькой буквы, он не экспортируется из-за этого)
+	vault.UpdatedAt = time.Now()
+	data, err := vault.ToBytes()
+	if err != nil {
+		color.Red(err.Error())
+	}
+	files.WriteFile(data, "data.json")
 }
