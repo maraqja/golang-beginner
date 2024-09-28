@@ -5,7 +5,10 @@ import (
 )
 
 func PrintError(value any) { // хотим распечатать любой тип вообще (any)
-
+	value, ok := value.(int)
+	if ok {
+		color.Red("2 СПОСОБ: Код ошибки: %d", value)
+	}
 	switch t := value.(type) { // получаем тип значения (можно использовать только внутри swtich !!!)
 	case string:
 		color.Red(t)
