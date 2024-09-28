@@ -26,4 +26,10 @@ func sum[T int | float32 | float64 | int16 | int32 | string](a, b T) T {
 	return a + b
 }
 
-//
+type List[T any] struct {
+	elements []T
+}
+
+func (l *List[T]) addElement(el T) T {
+	return el
+}
