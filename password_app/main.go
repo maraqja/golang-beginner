@@ -16,20 +16,19 @@ import (
 
 // оба файла необходимо коммитить, чтобы можно было восстановить зависимости
 func main() {
-	output.PrintError(1)
-	output.PrintError("Kaka")
 	db := files.NewJsonDb("data.json")
 	// db := cloud.NewCloudDb("https://kaka.com") // теперь можем использовать любую struct, реализующую интерфейса бд
 	vault := account.NewVault(db)
 Menu:
 	for {
-		userChoice := getMenu()
+		userChoice := promptData([]string{"Создать аккаунт", "Найти аккаунт", "Удалить аккаунт", "Выход", "Выберите вариант"})
+
 		switch userChoice {
-		case 1:
+		case "1":
 			createAccount(vault)
-		case 2:
+		case "2":
 			findAccount(vault)
-		case 3:
+		case "3":
 			deleteAccount(vault)
 		default:
 			break Menu
@@ -38,19 +37,8 @@ Menu:
 
 }
 
-func getMenu() int {
-	var userChoice int
-	fmt.Println("Выберите вариант")
-	fmt.Println("1. Создать аккаунт")
-	fmt.Println("2. Найти аккаунт")
-	fmt.Println("3. Удалить аккаунт")
-	fmt.Println("4 (и любое другое). Выход")
-	fmt.Scan(&userChoice)
-	return userChoice
-}
-
 func findAccount(vault *account.VaultWithDb) {
-	url := promptData("Введите URL")
+	url := promptData([]string{"Введите URL"})
 	foundAccounts := vault.FindAccountsByUrl(url)
 	// fmt.Println(foundAccounts)
 	if len(foundAccounts) == 0 {
@@ -62,7 +50,7 @@ func findAccount(vault *account.VaultWithDb) {
 }
 
 func deleteAccount(vault *account.VaultWithDb) {
-	url := promptData("Введите URL")
+	url := promptData([]string{"Введите URL"})
 	isDeleted := vault.DeleteAccountByUrl(url)
 	if isDeleted {
 		output.PrintError("Удалено")
@@ -72,9 +60,9 @@ func deleteAccount(vault *account.VaultWithDb) {
 }
 
 func createAccount(vault *account.VaultWithDb) {
-	login := promptData("Введите логин")
-	password := promptData("Введите пароль")
-	url := promptData("Введите URL")
+	login := promptData([]string{"Введите логин"})
+	password := promptData([]string{"Введите пароль"})
+	url := promptData([]string{"Введите URL"})
 	myAccount, err := account.NewAccount(login, password, url)
 	if err != nil {
 		fmt.Print(err)
@@ -84,8 +72,14 @@ func createAccount(vault *account.VaultWithDb) {
 	vault.AddAccount(myAccount)
 }
 
-func promptData(prompt string) string {
-	fmt.Println(prompt)
+func promptData[T any](prompt []T) string {
+	for i, line := range prompt {
+		if i == len(prompt)-1 {
+			fmt.Printf("%v: ", line)
+		} else {
+			fmt.Printf("%v. %v\n", i+1, line)
+		}
+	}
 	var res string
 	fmt.Scanln(&res) // чтобы при нажатии Enter регало пустую строку
 	return res
