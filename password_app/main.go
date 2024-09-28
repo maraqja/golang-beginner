@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"password_app/account" // {название модуля}/{название пакета} - инааче будет искать стандартный пакет
+	"password_app/files"
 
 	"github.com/fatih/color"
 )
@@ -16,7 +17,8 @@ import (
 
 // оба файла необходимо коммитить, чтобы можно было восстановить зависимости
 func main() {
-	vault := account.NewVault()
+	db := files.NewJsonDb("data.json")
+	vault := account.NewVault(db)
 Menu:
 	for {
 		userChoice := getMenu()
@@ -45,7 +47,7 @@ func getMenu() int {
 	return userChoice
 }
 
-func findAccount(vault *account.Vault) {
+func findAccount(vault *account.VaultWithDb) {
 	url := promptData("Введите URL")
 	foundAccounts := vault.FindAccountsByUrl(url)
 	// fmt.Println(foundAccounts)
@@ -57,7 +59,7 @@ func findAccount(vault *account.Vault) {
 	}
 }
 
-func deleteAccount(vault *account.Vault) {
+func deleteAccount(vault *account.VaultWithDb) {
 	url := promptData("Введите URL")
 	isDeleted := vault.DeleteAccountByUrl(url)
 	if isDeleted {
@@ -67,7 +69,7 @@ func deleteAccount(vault *account.Vault) {
 	}
 }
 
-func createAccount(vault *account.Vault) {
+func createAccount(vault *account.VaultWithDb) {
 	login := promptData("Введите логин")
 	password := promptData("Введите пароль")
 	url := promptData("Введите URL")

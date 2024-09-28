@@ -16,12 +16,20 @@ type Vault struct {
 	UpdatedAt time.Time `json:"updatedAt"`
 }
 
-func NewVault() *Vault {
-	file, err := files.ReadFile("data.json") // проверяем, существует ли vault (в конструкторе)
-	if err != nil {                          // просто создаем новый пустой vault
-		return &Vault{
-			Accounts:  []Account{},
-			UpdatedAt: time.Now(),
+type VaultWithDb struct {
+	Vault
+	db files.JsonDb
+}
+
+func NewVault(db *files.JsonDb) *VaultWithDb {
+	file, err := db.Read() // проверяем, существует ли vault (в конструкторе)
+	if err != nil {        // просто создаем новый пустой vault
+		return &VaultWithDb{
+			Vault: Vault{
+				Accounts:  []Account{},
+				UpdatedAt: time.Now(),
+			},
+			db: *db,
 		}
 	}
 	var vault Vault
@@ -29,17 +37,20 @@ func NewVault() *Vault {
 	if err != nil {
 		color.Red(err.Error())
 	}
-	return &vault
+	return &VaultWithDb{
+		Vault: vault,
+		db:    *db,
+	}
 }
 
-func (vault *Vault) AddAccount(acc *Account) {
+func (vault *VaultWithDb) AddAccount(acc *Account) {
 	vault.Accounts = append(vault.Accounts, *acc)
 	vault.UpdatedAt = time.Now()
 
 	vault.save()
 }
 
-func (vault *Vault) FindAccountsByUrl(url string) []Account {
+func (vault *VaultWithDb) FindAccountsByUrl(url string) []Account {
 	foundAccounts := []Account{}
 	for _, account := range vault.Accounts {
 		// // проверяем по полному совпадению
@@ -51,7 +62,7 @@ func (vault *Vault) FindAccountsByUrl(url string) []Account {
 	return foundAccounts
 }
 
-func (vault *Vault) DeleteAccountByUrl(url string) bool {
+func (vault *VaultWithDb) DeleteAccountByUrl(url string) bool {
 	newAccounts := []Account{}
 	isDeleted := false
 	for _, account := range vault.Accounts {
@@ -75,11 +86,11 @@ func (vault *Vault) ToBytes() ([]byte, error) { // метод для преоб�
 	return file, nil
 }
 
-func (vault *Vault) save() { // внутренний метод (поэтому с маленькой буквы, он не экспортируется из-за этого)
+func (vault *VaultWithDb) save() { // внутренний метод (поэтому с маленькой буквы, он не экспортируется из-за этого)
 	vault.UpdatedAt = time.Now()
-	data, err := vault.ToBytes()
+	data, err := vault.Vault.ToBytes()
 	if err != nil {
 		color.Red(err.Error())
 	}
-	files.WriteFile(data, "data.json")
+	vault.db.Write(data)
 }
