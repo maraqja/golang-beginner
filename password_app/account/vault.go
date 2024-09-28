@@ -3,7 +3,10 @@ package account
 import (
 	"encoding/json"
 	"errors"
+	"password_app/files"
 	"time"
+
+	"github.com/fatih/color"
 )
 
 // хранилище аккаунтов
@@ -13,15 +16,29 @@ type Vault struct {
 }
 
 func NewVault() *Vault {
-	return &Vault{
-		Accounts:  []Account{},
-		UpdatedAt: time.Now(),
+	file, err := files.ReadFile("data.json") // проверяем, существует ли vault (в конструкторе)
+	if err != nil {                          // просто создаем новый пустой vault
+		return &Vault{
+			Accounts:  []Account{},
+			UpdatedAt: time.Now(),
+		}
 	}
+	var vault Vault
+	err = json.Unmarshal(file, &vault) // парсим данные файла в JSON (в переменную vault)
+	if err != nil {
+		color.Red(err.Error())
+	}
+	return &vault
 }
 
-func (vault *Vault) AddAccount(acc Account) {
-	vault.Accounts = append(vault.Accounts, acc)
+func (vault *Vault) AddAccount(acc *Account) {
+	vault.Accounts = append(vault.Accounts, *acc)
 	vault.UpdatedAt = time.Now()
+	data, err := vault.ToBytes()
+	if err != nil {
+		color.Red(err.Error())
+	}
+	files.WriteFile(data, "data.json")
 }
 
 func (vault *Vault) ToBytes() ([]byte, error) { // метод для преобразования аккаунта-структуры в итоговый байт массив для создания файла

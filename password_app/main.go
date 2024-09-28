@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"password_app/account" // {название модуля}/{название пакета} - инааче будет искать стандартный пакет
-	"password_app/files"
 )
 
 // для добавления внешнего пакета - go get {путь до пакета} - go get github.com/fatih/color
@@ -62,14 +61,7 @@ func createAccount() {
 		return
 	}
 	vault := account.NewVault()
-	vault.AddAccount(*myAccount)
-	file, err := vault.ToBytes()
-	if err != nil {
-		fmt.Print(err)
-		return
-	}
-
-	files.WriteFile(file, "data.json")
+	vault.AddAccount(myAccount)
 }
 
 func promptData(prompt string) string {
