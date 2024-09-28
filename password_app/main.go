@@ -18,6 +18,7 @@ import (
 // оба файла необходимо коммитить, чтобы можно было восстановить зависимости
 func main() {
 	db := files.NewJsonDb("data.json")
+	// db := cloud.NewCloudDb("https://kaka.com") // теперь можем использовать любую struct, реализующую интерфейса бд
 	vault := account.NewVault(db)
 Menu:
 	for {

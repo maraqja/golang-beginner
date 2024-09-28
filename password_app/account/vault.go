@@ -3,7 +3,6 @@ package account
 import (
 	"encoding/json"
 	"errors"
-	"password_app/files"
 	"strings"
 	"time"
 
@@ -16,12 +15,20 @@ type Vault struct {
 	UpdatedAt time.Time `json:"updatedAt"`
 }
 
-type VaultWithDb struct {
-	Vault
-	db files.JsonDb
+type Db interface { // описываем интерфейс для возможных хранилищ (JsonDb/Cloud)
+	Read() ([]byte, error) // должен быть метод Read, возвращающий ([]byte, error)
+	Write([]byte)
 }
 
-func NewVault(db *files.JsonDb) *VaultWithDb {
+type VaultWithDb struct {
+	Vault
+	db Db
+}
+
+// Интерфейсы нельзя использовать с указателем
+// Корректной реализаицией интерфейса являются все struct, реализующие методы интерфейса
+// Не нужно писать никаких implements Db итд
+func NewVault(db Db) *VaultWithDb {
 	file, err := db.Read() // проверяем, существует ли vault (в конструкторе)
 	if err != nil {        // просто создаем новый пустой vault
 		return &VaultWithDb{
@@ -29,7 +36,7 @@ func NewVault(db *files.JsonDb) *VaultWithDb {
 				Accounts:  []Account{},
 				UpdatedAt: time.Now(),
 			},
-			db: *db,
+			db: db,
 		}
 	}
 	var vault Vault
@@ -39,7 +46,7 @@ func NewVault(db *files.JsonDb) *VaultWithDb {
 	}
 	return &VaultWithDb{
 		Vault: vault,
-		db:    *db,
+		db:    db,
 	}
 }
 
