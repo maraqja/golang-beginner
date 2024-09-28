@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"errors"
 	"password_app/files"
+	"strings"
 	"time"
 
 	"github.com/fatih/color"
@@ -39,6 +40,18 @@ func (vault *Vault) AddAccount(acc *Account) {
 		color.Red(err.Error())
 	}
 	files.WriteFile(data, "data.json")
+}
+
+func (vault *Vault) FindAccountsByUrl(url string) []Account {
+	foundAccounts := []Account{}
+	for _, account := range vault.Accounts {
+		// // проверяем по полному совпадению
+		// if account.Url == url {
+		if strings.Contains(account.Url, url) { // проверяем по включению подстроки
+			foundAccounts = append(foundAccounts, account)
+		}
+	}
+	return foundAccounts
 }
 
 func (vault *Vault) ToBytes() ([]byte, error) { // метод для преобразования аккаунта-структуры в итоговый байт массив для создания файла

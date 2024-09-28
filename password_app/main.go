@@ -3,6 +3,8 @@ package main
 import (
 	"fmt"
 	"password_app/account" // {название модуля}/{название пакета} - инааче будет искать стандартный пакет
+
+	"github.com/fatih/color"
 )
 
 // для добавления внешнего пакета - go get {путь до пакета} - go get github.com/fatih/color
@@ -14,17 +16,17 @@ import (
 
 // оба файла необходимо коммитить, чтобы можно было восстановить зависимости
 func main() {
-
+	vault := account.NewVault()
 Menu:
 	for {
 		userChoice := getMenu()
 		switch userChoice {
 		case 1:
-			createAccount()
+			createAccount(vault)
 		case 2:
-			findAccount()
+			findAccount(vault)
 		case 3:
-			deleteAccount()
+			deleteAccount(vault)
 		default:
 			break Menu
 		}
@@ -43,15 +45,23 @@ func getMenu() int {
 	return userChoice
 }
 
-func findAccount() {
+func findAccount(vault *account.Vault) {
+	url := promptData("Введите URL")
+	foundAccounts := vault.FindAccountsByUrl(url)
+	// fmt.Println(foundAccounts)
+	if len(foundAccounts) == 0 {
+		color.Red("Не найдено аккаунтов по url = %s", url)
+	}
+	for _, account := range foundAccounts {
+		account.Output()
+	}
+}
+
+func deleteAccount(vault *account.Vault) {
 
 }
 
-func deleteAccount() {
-
-}
-
-func createAccount() {
+func createAccount(vault *account.Vault) {
 	login := promptData("Введите логин")
 	password := promptData("Введите пароль")
 	url := promptData("Введите URL")
@@ -60,7 +70,7 @@ func createAccount() {
 		fmt.Print(err)
 		return
 	}
-	vault := account.NewVault()
+
 	vault.AddAccount(myAccount)
 }
 

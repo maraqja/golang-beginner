@@ -2,7 +2,6 @@ package account // чтобы создать отдельный пакет, ну
 // Соглашение - все что написано с большой буквы - ЭКСПОРТИРУЕМОЕ, иначе - нет
 import (
 	"errors"
-	"fmt"
 	"math/rand/v2"
 	"net/url"
 	"time"
@@ -46,10 +45,10 @@ func NewAccount(login, password, UrlString string) (*Account, error) { // Это
 }
 
 // Указываем что функция outputPassword - метод struct Account
-func (acc *Account) OutputPassword() {
+func (acc *Account) Output() {
 	color.Cyan(acc.Login)
-	fmt.Println(acc.Login, acc.Password, acc.Url)
-	acc.Url = "test"
+	color.Cyan(acc.Password)
+	color.Cyan(acc.Url)
 }
 
 func (acc *Account) generatePassword(n int) {
