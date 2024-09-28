@@ -21,3 +21,9 @@ func PrintError(value any) { // хотим распечатать любой т�
 	}
 
 }
+
+func sum[T int | float32 | float64 | int16 | int32 | string](a, b T) T {
+	return a + b
+}
+
+//
