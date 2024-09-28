@@ -15,9 +15,17 @@ type Vault struct {
 	UpdatedAt time.Time `json:"updatedAt"`
 }
 
-type Db interface { // описываем интерфейс для возможных хранилищ (JsonDb/Cloud)
-	Read() ([]byte, error) // должен быть метод Read, возвращающий ([]byte, error)
+type ByteReader interface {
+	Read() ([]byte, error)
+}
+
+type ByteWriter interface {
 	Write([]byte)
+}
+
+type Db interface {
+	ByteReader
+	ByteWriter
 }
 
 type VaultWithDb struct {
