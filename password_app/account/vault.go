@@ -3,6 +3,7 @@ package account
 import (
 	"encoding/json"
 	"errors"
+	"password_app/encrypter"
 	"password_app/output"
 	"strings"
 	"time"
@@ -29,13 +30,14 @@ type Db interface {
 
 type VaultWithDb struct {
 	Vault
-	db Db
+	db  Db // нельзя использовать указатель на интерфейс
+	enc *encrypter.Encrypter
 }
 
 // Интерфейсы нельзя использовать с указателем
 // Корректной реализаицией интерфейса являются все struct, реализующие методы интерфейса
 // Не нужно писать никаких implements Db итд
-func NewVault(db Db) *VaultWithDb {
+func NewVault(db Db, enc *encrypter.Encrypter) *VaultWithDb {
 	file, err := db.Read() // проверяем, существует ли vault (в конструкторе)
 	if err != nil {        // просто создаем новый пустой vault
 		return &VaultWithDb{
@@ -43,7 +45,8 @@ func NewVault(db Db) *VaultWithDb {
 				Accounts:  []Account{},
 				UpdatedAt: time.Now(),
 			},
-			db: db,
+			db:  db,
+			enc: enc,
 		}
 	}
 	var vault Vault
@@ -54,6 +57,7 @@ func NewVault(db Db) *VaultWithDb {
 	return &VaultWithDb{
 		Vault: vault,
 		db:    db,
+		enc:   enc,
 	}
 }
 

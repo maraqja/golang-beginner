@@ -2,8 +2,8 @@ package main
 
 import (
 	"fmt"
-	"os"
 	"password_app/account" // {название модуля}/{название пакета} - инааче будет искать стандартный пакет
+	"password_app/encrypter"
 	"password_app/files"
 	"password_app/output"
 	"strings"
@@ -30,16 +30,14 @@ var menu = map[string]func(*account.VaultWithDb){ // в каждом ключе 
 var menuChoices = []string{"Создать аккаунт", "Найти аккаунт по URL", "Найти аккаунт по логину", "Удалить аккаунт", "Выход", "Выберите вариант"}
 
 func main() {
-	err := godotenv.Load()
+	err := godotenv.Load() // забираем переменные из файлы и засовываем их в окружение
 	if err != nil {
 		output.PrintError("Не удалось найти env файл")
 	}
-	for _, e := range os.Environ() { // вернет все текущие переменные окружения
-		fmt.Println(e)
-	}
 	db := files.NewJsonDb("data.json")
 	// db := cloud.NewCloudDb("https://kaka.com") // теперь можем использовать любую struct, реализующую интерфейса бд
-	vault := account.NewVault(db)
+	enc := encrypter.NewEncrypter()
+	vault := account.NewVault(db, enc)
 Menu:
 	for {
 		userChoice := promptData(menuChoices...) // передаем в функцию элементы слайса через запятую
