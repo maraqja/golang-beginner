@@ -15,6 +15,13 @@ import (
 // в go.sum указывает текущий хэш (коммита), относящийся к пакету
 
 // оба файла необходимо коммитить, чтобы можно было восстановить зависимости
+
+var menu = map[string]func(*account.VaultWithDb){ // в каждом ключе map - функция
+	"1": createAccount,
+	"2": findAccount,
+	"3": deleteAccount,
+}
+
 func main() {
 	db := files.NewJsonDb("data.json")
 	// db := cloud.NewCloudDb("https://kaka.com") // теперь можем использовать любую struct, реализующую интерфейса бд
@@ -22,17 +29,11 @@ func main() {
 Menu:
 	for {
 		userChoice := promptData([]string{"Создать аккаунт", "Найти аккаунт", "Удалить аккаунт", "Выход", "Выберите вариант"})
-
-		switch userChoice {
-		case "1":
-			createAccount(vault)
-		case "2":
-			findAccount(vault)
-		case "3":
-			deleteAccount(vault)
-		default:
+		menuFunc := menu[userChoice]
+		if menuFunc == nil {
 			break Menu
 		}
+		menuFunc(vault)
 	}
 
 }
