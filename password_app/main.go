@@ -7,6 +7,8 @@ import (
 	"password_app/files"
 	"password_app/output"
 	"strings"
+
+	"github.com/joho/godotenv"
 )
 
 // для добавления внешнего пакета - go get {путь до пакета} - go get github.com/fatih/color
@@ -28,8 +30,10 @@ var menu = map[string]func(*account.VaultWithDb){ // в каждом ключе 
 var menuChoices = []string{"Создать аккаунт", "Найти аккаунт по URL", "Найти аккаунт по логину", "Удалить аккаунт", "Выход", "Выберите вариант"}
 
 func main() {
-	test_var_env := os.Getenv("TEST_VAR") // получаем переменную окружения TEST_VAR - для передачи: TEST_VAR=3 go run .
-	fmt.Println(test_var_env)
+	err := godotenv.Load()
+	if err != nil {
+		output.PrintError("Не удалось найти env файл")
+	}
 	for _, e := range os.Environ() { // вернет все текущие переменные окружения
 		fmt.Println(e)
 	}
