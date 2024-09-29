@@ -64,12 +64,11 @@ func (vault *VaultWithDb) AddAccount(acc *Account) {
 	vault.save()
 }
 
-func (vault *VaultWithDb) FindAccountsByUrl(url string) []Account {
+func (vault *VaultWithDb) FindAccounts(str string, checker func(Account, string) bool) []Account {
 	foundAccounts := []Account{}
 	for _, account := range vault.Accounts {
-		// // проверяем по полному совпадению
-		// if account.Url == url {
-		if strings.Contains(account.Url, url) { // проверяем по включению подстроки
+
+		if checker(account, str) { // проверяем по включению подстроки
 			foundAccounts = append(foundAccounts, account)
 		}
 	}

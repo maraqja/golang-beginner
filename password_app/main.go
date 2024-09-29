@@ -5,6 +5,7 @@ import (
 	"password_app/account" // {название модуля}/{название пакета} - инааче будет искать стандартный пакет
 	"password_app/files"
 	"password_app/output"
+	"strings"
 )
 
 // для добавления внешнего пакета - go get {путь до пакета} - go get github.com/fatih/color
@@ -40,7 +41,9 @@ Menu:
 
 func findAccount(vault *account.VaultWithDb) {
 	url := promptData([]string{"Введите URL"})
-	foundAccounts := vault.FindAccountsByUrl(url)
+	foundAccounts := vault.FindAccounts(url, func(acc account.Account, str string) bool {
+		return strings.Contains(acc.Url, str)
+	})
 	// fmt.Println(foundAccounts)
 	if len(foundAccounts) == 0 {
 		output.PrintError("Не найдено аккаунтов по url = " + url)
