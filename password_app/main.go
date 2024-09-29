@@ -26,12 +26,22 @@ var menu = map[string]func(*account.VaultWithDb){ // в каждом ключе 
 
 var menuChoices = []string{"Создать аккаунт", "Найти аккаунт по URL", "Найти аккаунт по логину", "Удалить аккаунт", "Выход", "Выберите вариант"}
 
+func menuCounter() func() { // замыкание - функция, возвращающая функцию, при этом возвращаемая функция смотрит на лексическое окружение верхней функции
+	i := 0
+	return func() { // особенность в том, что будет храниться информация о i
+		i++
+		fmt.Println(i)
+	}
+} // то есть как бы используем дополнительный контекст для хранения данных в памяти
+
 func main() {
 	db := files.NewJsonDb("data.json")
 	// db := cloud.NewCloudDb("https://kaka.com") // теперь можем использовать любую struct, реализующую интерфейса бд
 	vault := account.NewVault(db)
+	counter := menuCounter()
 Menu:
 	for {
+		counter()
 		userChoice := promptData(menuChoices...) // передаем в функцию элементы слайса через запятую
 		menuFunc := menu[userChoice]
 		if menuFunc == nil {
