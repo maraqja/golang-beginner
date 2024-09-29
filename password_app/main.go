@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"os"
 	"password_app/account" // {название модуля}/{название пакета} - инааче будет искать стандартный пакет
 	"password_app/files"
 	"password_app/output"
@@ -26,22 +27,17 @@ var menu = map[string]func(*account.VaultWithDb){ // в каждом ключе 
 
 var menuChoices = []string{"Создать аккаунт", "Найти аккаунт по URL", "Найти аккаунт по логину", "Удалить аккаунт", "Выход", "Выберите вариант"}
 
-func menuCounter() func() { // замыкание - функция, возвращающая функцию, при этом возвращаемая функция смотрит на лексическое окружение верхней функции
-	i := 0
-	return func() { // особенность в том, что будет храниться информация о i
-		i++
-		fmt.Println(i)
-	}
-} // то есть как бы используем дополнительный контекст для хранения данных в памяти
-
 func main() {
+	test_var_env := os.Getenv("TEST_VAR") // получаем переменную окружения TEST_VAR - для передачи: TEST_VAR=3 go run .
+	fmt.Println(test_var_env)
+	for _, e := range os.Environ() { // вернет все текущие переменные окружения
+		fmt.Println(e)
+	}
 	db := files.NewJsonDb("data.json")
 	// db := cloud.NewCloudDb("https://kaka.com") // теперь можем использовать любую struct, реализующую интерфейса бд
 	vault := account.NewVault(db)
-	counter := menuCounter()
 Menu:
 	for {
-		counter()
 		userChoice := promptData(menuChoices...) // передаем в функцию элементы слайса через запятую
 		menuFunc := menu[userChoice]
 		if menuFunc == nil {
