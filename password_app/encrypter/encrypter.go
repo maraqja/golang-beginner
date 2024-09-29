@@ -40,6 +40,23 @@ func (enc *Encrypter) Encrypt(stringForEncrypt []byte) []byte {
 	return aesGCM.Seal(nonce, nonce, stringForEncrypt, nil) // шифруем тут
 }
 
-func (enc *Encrypter) Decrypt(encryptedString []byte) string {
-	return ""
+func (enc *Encrypter) Decrypt(encryptedString []byte) []byte {
+	block, err := aes.NewCipher([]byte(enc.Key)) // создаем блок для шифрования
+	if err != nil {
+		panic(err.Error())
+	}
+	aesGCM, err := cipher.NewGCM(block) // создаем GCM с помощью блока
+	if err != nil {
+		panic(err.Error())
+	}
+	// nonce уже есть в нашей зашифрованной строки
+	nonceSize := aesGCM.NonceSize()
+	nonce, cipherText := encryptedString[:nonceSize], encryptedString[nonceSize:]
+	// nonce будет в начале строки до nonceSize
+	// сами зашифрованные данные - будут после nonceSize
+	decipherText, err := aesGCM.Open(nil, nonce, cipherText, nil)
+	if err != nil {
+		panic(err.Error())
+	}
+	return decipherText
 }
