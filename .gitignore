@@ -2,3 +2,4 @@ app-1
 *.txt
 data.json
 .env*
+*.vault

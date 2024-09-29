@@ -7,6 +7,8 @@ import (
 	"password_app/output"
 	"strings"
 	"time"
+
+	"github.com/fatih/color"
 )
 
 // хранилище аккаунтов
@@ -49,11 +51,13 @@ func NewVault(db Db, enc *encrypter.Encrypter) *VaultWithDb {
 			enc: enc,
 		}
 	}
+	decryptedData := enc.Decrypt(file) // при загрузке из файла сохраняем в память расшифрованные данные
 	var vault Vault
-	err = json.Unmarshal(file, &vault) // парсим данные файла в JSON (в переменную vault)
+	err = json.Unmarshal(decryptedData, &vault) // парсим данные файла в JSON (в переменную vault)
 	if err != nil {
 		output.PrintError(err)
 	}
+	color.Cyan("Найдено %d аккаунтов", len(vault.Accounts))
 	return &VaultWithDb{
 		Vault: vault,
 		db:    db,
@@ -106,8 +110,9 @@ func (vault *Vault) ToBytes() ([]byte, error) { // метод для преоб�
 func (vault *VaultWithDb) save() { // внутренний метод (поэтому с маленькой буквы, он не экспортируется из-за этого)
 	vault.UpdatedAt = time.Now()
 	data, err := vault.Vault.ToBytes()
+	encryptedData := vault.enc.Encrypt(data)
 	if err != nil {
 		output.PrintError(err)
 	}
-	vault.db.Write(data)
+	vault.db.Write(encryptedData)
 }

@@ -34,7 +34,7 @@ func main() {
 	if err != nil {
 		output.PrintError("Не удалось найти env файл")
 	}
-	db := files.NewJsonDb("data.json")
+	db := files.NewJsonDb("data.vault")
 	// db := cloud.NewCloudDb("https://kaka.com") // теперь можем использовать любую struct, реализующую интерфейса бд
 	enc := encrypter.NewEncrypter()
 	vault := account.NewVault(db, enc)
