@@ -23,6 +23,7 @@ func GetWeather(geo geo.GeoData, format int ) string {
 		fmt.Println(err.Error())
 		return ""
 	}
+	defer response.Body.Close() // не забывать закрыть чтение body!!! (иначе будет утечка памяти) - с помощью defer откладываем выполнение на после выхода из функции
 	if response.StatusCode != 200 {
 		fmt.Println(err.Error())
 		return ""
