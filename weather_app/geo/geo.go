@@ -20,12 +20,12 @@ func GetMyLocation(city string) (*GeoData, error) { // если не указа�
 	if city != "" {
 		isCity := checkCity(city)
 		if !isCity {
-			panic("Нет такого города")
+			return nil, errors.New("NOCITY")
 		}
 		return &GeoData{
 			City: city,
 		}, nil
-		
+
 	}
 	response, err := http.Get("https://ipapi.co/json/")
 	if err != nil {
@@ -45,12 +45,11 @@ func GetMyLocation(city string) (*GeoData, error) { // если не указа�
 	return &geo, nil
 }
 
-
-func checkCity(city string) bool { 
+func checkCity(city string) bool {
 	postBody, _ := json.Marshal(map[string]string{
 		"city": city,
 	}) // получаем []byte
-	response, err := http.Post("https://countriesnow.space/api/v0.1/countries/population/cities", "application/json", bytes.NewBuffer(postBody) )
+	response, err := http.Post("https://countriesnow.space/api/v0.1/countries/population/cities", "application/json", bytes.NewBuffer(postBody))
 	if err != nil {
 		return false
 	}
