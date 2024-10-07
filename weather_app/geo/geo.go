@@ -16,11 +16,14 @@ type CityPopulationResponse struct {
 	Error bool `json: "error"`
 }
 
+var ErrorNoCity = errors.New("NOCITY") // выносим в переменную чтобы переиспользовать в тестах
+var ErrorNot200 = errors.New("NOT200")
+
 func GetMyLocation(city string) (*GeoData, error) { // если не указан city (""), то получаем с помощью стороннего API город локации вызова
 	if city != "" {
 		isCity := checkCity(city)
 		if !isCity {
-			return nil, errors.New("NOCITY")
+			return nil, ErrorNoCity
 		}
 		return &GeoData{
 			City: city,
@@ -33,7 +36,7 @@ func GetMyLocation(city string) (*GeoData, error) { // если не указа�
 	}
 	defer response.Body.Close() // не забывать закрыть чтение body!!! (иначе будет утечка памяти) - с помощью defer откладываем выполнение на после выхода из функции
 	if response.StatusCode != 200 {
-		return nil, errors.New("NOT_200")
+		return nil, ErrorNot200
 	}
 
 	body, err := io.ReadAll(response.Body)

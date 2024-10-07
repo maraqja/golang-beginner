@@ -5,9 +5,10 @@ import (
 	"weather_app/geo"
 )
 
+// for test running - go test geo/geo_test.go
 func TestGetMyLocation(t *testing.T) { // t - позволяет управлять контекстом теста
 	// Arange - подготовка теста: expected результат, доп подготовкаm данные для функции
-	city := "Moscow"
+	city := "London"
 	expected := geo.GeoData{
 		City: "London",
 	}
@@ -22,4 +23,13 @@ func TestGetMyLocation(t *testing.T) { // t - позволяет управля�
 	}
 }
 
-// go test geo/geo_test.go
+func TestGetMyLocationNoCity(t *testing.T) { // негативный тест
+	city := "kaka"
+
+	_, err := geo.GetMyLocation(city)
+	// Assert - проверка результата
+	if err != geo.ErrorNoCity { // ожидаем эту ошибку
+		t.Errorf("Expected %s, got %s", geo.ErrorNoCity, err)
+	}
+
+}
